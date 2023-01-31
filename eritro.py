@@ -1,4 +1,4 @@
-#programa para controlar el eritrodeformetro
+#programa para controlar el reometro
 #voy a usar la libreria TkInter para crear la GUI
 # para comunicarme con el puerto USB voy a usar la libreria pySerial
 import tkinter as tk
@@ -22,28 +22,29 @@ bot_dinamico=ttk.Button(label_ensayo,text="Dinamico")
 bot_dinamico.grid(column=0,row=3)
 
 #botones de motor
-bot_encender=ttk.Button(root,text="Encender motor")
+bot_encender=ttk.Button(root,text="Encender motor",command=parada)
 bot_encender.grid(column=1,row=0)
 bot_apagar=ttk.Button(root,text="Apagar motor")
 bot_apagar.grid(column=1,row=1)
 
 #botones del puerto
+flag_puerto=tk.StringVar()
 label_puerto=ttk.LabelFrame(root,text="Puerto:")
 label_puerto.grid(column=1,row=2)
-abrir_puerto=ttk.Radiobutton(label_puerto,text="Abrir")
+abrir_puerto=ttk.Radiobutton(label_puerto,text="Abrir",value=1,variable=flag_puerto)
 abrir_puerto.grid(column=1,row=3)
-cerrar_puerto=ttk.Radiobutton(label_puerto,text="Cerrar")
+cerrar_puerto=ttk.Radiobutton(label_puerto,text="Cerrar",value=0,variable=flag_puerto)
 cerrar_puerto.grid(column=1,row=4)
 
 #botones de frecuencia
 frec=tk.StringVar()
 label_frecuencia=ttk.LabelFrame(root,text="Frecuencia:")
 label_frecuencia.grid(column=0,row=5)
-cinco=ttk.Radiobutton(label_frecuencia,text="0,5Hz",value=0.5,variable=frec)
+cinco=ttk.Radiobutton(label_frecuencia,text="0,5Hz",value=5,variable=frec)
 cinco.grid(column=0,row=6)
-diez=ttk.Radiobutton(label_frecuencia,text="1Hz",value=1.0,variable=frec)
+diez=ttk.Radiobutton(label_frecuencia,text="1Hz",value=10,variable=frec)
 diez.grid(column=0,row=7)
-quince=ttk.Radiobutton(label_frecuencia,text="1,5Hz",value=1.5,variable=frec)
+quince=ttk.Radiobutton(label_frecuencia,text="1,5Hz",value=15,variable=frec)
 quince.grid(column=0,row=8)
 
 
@@ -63,4 +64,11 @@ root.mainloop()
 #FUNCIONES 
 def parada(): 
     ser.write("M00000")
+
+def puerto(): 
+    if flag_puerto.get() == 1: 
+        ser.open()
+    if flag_puerto.get() == 0:
+        ser.close()
+
 
