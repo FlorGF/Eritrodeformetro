@@ -1,9 +1,13 @@
 #programa para controlar el reometro
 #voy a usar la libreria TkInter para crear la GUI
 # para comunicarme con el puerto USB voy a usar la libreria pySerial
+#para graficar voy a usar matplotlib
+#para splitear el string que me mandan desde el USB voy a usar la libreria string
 import tkinter as tk
 from tkinter import ttk
 import serial 
+import matplotlib as plt 
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 root=tk.Tk()
 ser=serial.Serial() #falta definir donde esta el puerto
@@ -15,11 +19,41 @@ root.config(width=400,height=300)
 def comunicaUSB(cod_token):
     ser.write(cod_token)
 
+#esta funcion se encarga de leer los datos que se mandan desde el puerto
+def leerUSB():
+    datos = ser.readline() #datos es un string 
+    return datos
+
+def ensayo(codigo):
+    comunicaUSB(codigo) 
+    #aca debería poner que espere el OK que esta midiendo 
+    med = leerUSB()
+    #tengo que pasarla a flotante aca 
+    medicion = med.split(sep="\n")
+    return medicion
+
+#funcion para graficar en la GUI
+def graficar():
+    tiempo = []
+    eje_r = []
+    eje_t = []
+    cent = []
+    medicion = ensayo()
+    for m in medicion: 
+        aux = m.split(sep=";")
+        tiempo.append=aux[0]
+        eje_r.append=aux[1]
+        eje_t.append=aux[2]
+        cent.append=aux[3]
+
+     figure = plt.Figure(figsize=(6, 4), dpi=100)
+    
+    
 #funcionalidad del boton de parada
 def parada(): 
     cod="M00000"
     print(cod)
-    #comunicaUSB(cod)
+    #ensayo(cod)
 
 
 #funcionalidad del puerto
@@ -35,14 +69,14 @@ def f_puerto():
 def e_carga():
     vel=velocidad.get()
     cod="EC"+vel+"00"
-   # comunicaUSB(cod)
+   #ensayo(cod)
     print(cod)
 
 #funcionalidad del boton de descarga
 def e_descarga():
     vel=velocidad.get()
     cod="ED"+vel+"00"
-    #comunicaUSB(cod)
+    #ensayo(cod)
     print(cod)
 
 
@@ -55,7 +89,7 @@ def e_dinamico():
         cod="EO"+vel+"0"+f 
     
     print(cod)
-    #comunicaUSB(cod)
+    #ensayo(cod)
 
 ##########################################################################################
 #defino los botones
