@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import ttk
 import serial 
 import matplotlib as plt 
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 root=tk.Tk()
@@ -24,30 +25,38 @@ def leerUSB():
     datos = ser.readline() #datos es un string 
     return datos
 
+#funcion para graficar en la GUI
+def graficar(x,r,t,cent):
+    figure = Figure(figsize=(6, 4), dpi=100)
+    ax1 = figure.add_subplot(111)
+    bar1 = FigureCanvasTkAgg(figure, top)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+    ax1.plot(x,r,"bo",label="Eje R")
+    ax1.plot(x,t,"g",label="Eje T")
+    ax1.plot(x,cent,"r",label="Centro")
+    ax1.set_title("Gráfica")
+    ax1.set_ylabel("Intensidad")
+    ax1.set_xlabel("Tiempo")
+
 def ensayo(codigo):
+    tiempo = []
+    eje_r = []
+    eje_t = []
+    cent = []
     comunicaUSB(codigo) 
     #aca debería poner que espere el OK que esta midiendo 
     med = leerUSB()
     #tengo que pasarla a flotante aca 
     medicion = med.split(sep="\n")
-    return medicion
-
-#funcion para graficar en la GUI
-def graficar():
-    tiempo = []
-    eje_r = []
-    eje_t = []
-    cent = []
-    medicion = ensayo()
     for m in medicion: 
         aux = m.split(sep=";")
         tiempo.append=aux[0]
         eje_r.append=aux[1]
         eje_t.append=aux[2]
         cent.append=aux[3]
+    graficar(tiempo,eje_r,eje_t,cent)
+    return medicion
 
-     figure = plt.Figure(figsize=(6, 4), dpi=100)
-    
     
 #funcionalidad del boton de parada
 def parada(): 
