@@ -9,6 +9,7 @@ import serial
 import matplotlib as plt 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import csv
 
 root=tk.Tk()
 ser=serial.Serial() #falta definir donde esta el puerto
@@ -56,6 +57,16 @@ def ensayo(codigo):
         cent.append=aux[3]
     graficar(tiempo,eje_r,eje_t,cent)
     return medicion
+
+#funcion para guardar la medición 
+def guardar():
+    med = leerUSB()
+    medicion = med.split(sep="\n")
+    with open('medicion.csv',mode='w') as file:
+         data_writer = csv.writer(file)
+         for m in med: 
+              data_writer.writerow(m)
+    
 
     
 #funcionalidad del boton de parada
