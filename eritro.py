@@ -34,18 +34,19 @@ def graficar(x,r,t,cent):
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
     ax1.plot(x,r,"bo",label="Eje R")
     ax1.plot(x,t,"g",label="Eje T")
-    ax1.plot(x,cent,"r",label="Centro")
+    ax1.plot(x,cent,"r",label="Central")
     ax1.set_title("Gráfica")
     ax1.set_ylabel("Intensidad")
     ax1.set_xlabel("Tiempo")
 
-def ensayo(codigo):
+def ensayo(codigo,tiempo):
     tiempo = []
     eje_r = []
     eje_t = []
     cent = []
     comunicaUSB(codigo) 
     #aca debería poner que espere el OK que esta midiendo 
+    #también deberia esperar una cantidad de tiempo dada por cada ensayo así no toma datos
     med = leerUSB()
     #tengo que pasarla a flotante aca 
     medicion = med.split(sep="\n")
@@ -89,18 +90,23 @@ def f_puerto():
 def e_carga():
     vel=velocidad.get()
     cod="EC"+vel+"00"
-   #ensayo(cod)
+    tiempo=333.3 #tiempo que dura el ensayo
+   #ensayo(cod,tiempo)
     print(cod)
+  
 
 #funcionalidad del boton de descarga
 def e_descarga():
+    tiempo=433.3 #tiempo que dura el ensayo
     vel=velocidad.get()
     cod="ED"+vel+"00"
-    #ensayo(cod)
+    #ensayo(cod,tiempo)
     print(cod)
+    
 
 
 def e_dinamico():
+    tiempo=433.3 #tiempo que dura el ensayo
     vel=velocidad.get()
     f=frec.get()
     if(f != 5):
@@ -109,7 +115,8 @@ def e_dinamico():
         cod="EO"+vel+"0"+f 
     
     print(cod)
-    #ensayo(cod)
+    #ensayo(cod,tiempo)
+    
 
 ##########################################################################################
 #defino los botones
